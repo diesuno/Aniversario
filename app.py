@@ -19,4 +19,4 @@ with open("index.html", "r", encoding="utf-8") as f:
     html_data = f.read()
 
 # Mostramos la web HTML dentro de Streamlit
-components.html(html_data, height=850, scrolling=True)
+components.html(html_data, height=700, scrolling=True)
