@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            color: #4a4a4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: filter 0.4s ease;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #b76e79;
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        button {
+            background-color: #b76e79;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            width: 80%;
+            max-width: 250px;
+        }
+
+        button:hover {
+            background-color: #a05a65;
+            transform: translateY(-2px);
+        }
+
+        button.btn-secondary {
+            background-color: transparent;
+            color: #b76e79;
+            border: 1px solid #b76e79;
+        }
+
+        button.btn-secondary:hover {
+            background-color: #fcf4f5;
+        }
+
+        #options-menu {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            max-width: 450px;
+            width: 85%;
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper" id="main-wrapper">
+        <div class="container">
+            
+            <div id="slideshow">
+                <div class="slide active">
+                    <h2>Hola mi amor...</h2>
+                    <p>En el paso de todos estos años, vivimos un montón de experiencias juntos...</p>
+                    <button onclick="nextSlide(1)">Siguiente</button>
+                </div>
+                <div class="slide">
+                    <p>Hicimos miles de cosas, y lo más lindo es que todas las hicimos juntos.</p>
+                    <button onclick="nextSlide(2)">Siguiente</button>
+                </div>
+                <div class="slide">
+                    <p>Por eso, con esta web te quiero invitar a que decidas entre algunas opciones que te voy a proponer...</p>
+                    <button onclick="nextSlide(3)">Siguiente</button>
+                </div>
+                <div class="slide">
+                    <h2>Vos elegís</h2>
+                    <button onclick="startOptions()">Descubrir opciones</button>
+                </div>
+            </div>
+
+            <div id="options-menu">
+                <h2 id="menu-title">¿Qué plan preferís?</h2>
+                <p id="menu-subtitle">Tocá cada opción para descubrir qué esconde...</p>
+                <div class="options-grid">
+                    <button id="btn-1" onclick="openModal('Opción 1', 'Cena en el restaurante Candado, brindando con un buen vino 🍷... vamos y volvemos caminando (¡Como podamos! jaja)', 1)">Opción 1</button>
+                    <button id="btn-2" onclick="openModal('Opción 2', 'Poner a prueba nuestras neuronas en una sala de escape (tranqui, si nos quedamos atrapados pedimos delivery) y después unas partidas de pool 🎱', 2)">Opción 2</button>
+                    <button id="btn-3" onclick="openModal('Opción 3', 'Cena íntima a la luz de las velas en casa, con música de fondo, mirándonos a los ojos y disfrutando de un rico Sushi 🍣🥢', 3)">Opción 3</button>
+                    <button id="btn-4" onclick="openModal('Opción 4', 'Voucher para un día completo de Spa y masajes para relajarnos juntos (Día a elegir) 💆‍♀️💆‍♂️', 4)">Opción 4</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Opción</h2>
+            <p id="modal-text">Acá va el texto de la sorpresa...</p>
+            <button onclick="confirmSelection()">¡Me encanta, elijo esta!</button>
+            <button class="btn-secondary" onclick="closeModal()">Volver a mirar</button>
+        </div>
+    </div>
+
+    <!-- REEMPLAZAR TU_ENLACE_DE_FORMSPREE ACÁ ABAJO -->
+    <form id="hidden-form" action="TU_ENLACE_DE_FORMSPREE" method="POST" style="display: none;">
+        <input type="hidden" name="Plan_Elegido" id="chosen-plan" value="">
+    </form>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        
+        function nextSlide(index) {
+            slides[index - 1].classList.remove('active');
+            setTimeout(() => {
+                slides[index].classList.add('active');
+            }, 300);
+        }
+
+        function startOptions() {
+            document.getElementById('slideshow').style.display = 'none';
+            const optionsMenu = document.getElementById('options-menu');
+            optionsMenu.style.display = 'block';
+            setTimeout(() => {
+                optionsMenu.style.opacity = 1;
+            }, 50);
+        }
+
+        let currentOptionNumber = 0;
+        let planHoyElegido = 0;  // 0 = nada, 1, 2 o 3 = opción elegida
+        let spaElegido = false;  // true = ya eligió la 4
+
+        function openModal(title, text, optionNumber) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            currentOptionNumber = optionNumber;
+
+            document.getElementById('main-wrapper').style.filter = 'blur(5px)';
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('main-wrapper').style.filter = 'none';
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function confirmSelection() {
+            if (currentOptionNumber === 4) {
+                if (planHoyElegido === 0) {
+                    // Eligió la 4 PRIMERO
+                    alert("¡Felicitaciones! Recibido, ahora qué querés hacer hoy??? 😂");
+                    spaElegido = true;
+                    closeModal();
+                    marcarOpcionVerde(4, "¡Día de Spa asegurado! ✔");
+                    document.getElementById('btn-4').title = "Ya elegiste esto, te falta elegir una opción para hacer hoy!";
+                } else {
+                    // Eligió 1, 2 o 3 primero, y ahora está eligiendo la 4 para terminar
+                    spaElegido = true;
+                    closeModal();
+                    marcarOpcionVerde(4, "¡Día de Spa asegurado! ✔");
+                    ejecutarEnvioFinal();
+                }
+            } else {
+                if (spaElegido === false) {
+                    // Eligió 1, 2 o 3 PRIMERO
+                    alert("¡Felicitaciones! Por ser hoy un día especial, esta opción también incluye el contenido de la opción 4 😉");
+                    planHoyElegido = currentOptionNumber;
+                    closeModal();
+                    deshabilitarOtrasOpciones(currentOptionNumber);
+                    marcarOpcionVerde(currentOptionNumber, "¡Opción elegida! ✔");
+                    document.getElementById('menu-subtitle').innerText = "Ahora seleccioná la Opción 4 para confirmar todo 🎁";
+                } else {
+                    // Eligió la 4 primero, y ahora está eligiendo 1, 2 o 3 para terminar
+                    planHoyElegido = currentOptionNumber;
+                    closeModal();
+                    deshabilitarOtrasOpciones(currentOptionNumber);
+                    marcarOpcionVerde(currentOptionNumber, "¡Opción elegida! ✔");
+                    ejecutarEnvioFinal();
+                }
+            }
+        }
+
+        function marcarOpcionVerde(numero, texto) {
+            let btn = document.getElementById('btn-' + numero);
+            btn.style.backgroundColor = "#8ca376"; // Verde
+            btn.innerText = texto;
+            btn.onclick = null; // Deshabilita el clic
+        }
+
+        function deshabilitarOtrasOpciones(elegida) {
+            for (let i = 1; i <= 3; i++) {
+                if (i !== elegida) {
+                    let btn = document.getElementById('btn-' + i);
+                    btn.style.backgroundColor = "#d3d3d3"; // Gris
+                    btn.style.color = "#888";
+                    btn.style.transform = "none";
+                    btn.title = "Fuera de stock, disponible dentro de unas semanas";
+                    btn.onclick = null;
+                }
+            }
+        }
+
+        function ejecutarEnvioFinal() {
+            document.getElementById('menu-title').innerText = "¡Enviando mensaje! 💌";
+            document.getElementById('menu-subtitle').innerText = "Preparate para disfrutar...";
+            
+            // Construimos el texto para el email basándonos en el número que haya elegido
+            let textoEmail = "Eligió la Opción " + planHoyElegido + " + Día de Spa (Opción 4)";
+            document.getElementById('chosen-plan').value = textoEmail;
+            
+            setTimeout(() => {
+                document.getElementById('hidden-form').submit();
+            }, 3500);
+        }
+    </script>
+
+</body>
+</html>
