@@ -150,6 +150,20 @@
             color: #555;
         }
 
+        /* Ajustes específicos para pantallas de celular (iPhone, Samsung, etc) */
+        @media (max-width: 768px) {
+            .main-wrapper {
+                align-items: flex-start; /* Quitamos el centrado forzado */
+                padding-top: 12vh; /* Le damos el margen exacto desde arriba */
+            }
+            .modal-content {
+                transform: translateY(-20px); /* Sube la ventana sorpresa un poco */
+            }
+            .modal-overlay.active .modal-content {
+                transform: translateY(-10vh); /* Mantiene la ventana arriba al aparecer */
+            }
+        }
+
     </style>
 </head>
 <body>
