@@ -150,20 +150,19 @@
             color: #555;
         }
 
-        /* Ajustes específicos para pantallas de celular (iPhone, Samsung, etc) */
+        /* Ajustes específicos para pantallas de celular */
         @media (max-width: 768px) {
             .main-wrapper {
-                align-items: flex-start; /* Quitamos el centrado forzado */
-                padding-top: 12vh; /* Le damos el margen exacto desde arriba */
+                align-items: flex-start; 
+                padding-top: 12vh; 
             }
             .modal-content {
-                transform: translateY(-20px); /* Sube la ventana sorpresa un poco */
+                transform: translateY(-20px); 
             }
             .modal-overlay.active .modal-content {
-                transform: translateY(-10vh); /* Mantiene la ventana arriba al aparecer */
+                transform: translateY(-10vh); 
             }
         }
-
     </style>
 </head>
 <body>
@@ -213,16 +212,6 @@
             <button class="btn-secondary" onclick="closeModal()">Volver a mirar</button>
         </div>
     </div>
-
-<!-- REEMPLAZAR TUCORREO@gmail.com CON TU MAIL REAL -->
-    <form id="hidden-form" action="https://formsubmit.co/TUCORREO@gmail.com" method="POST" style="display: none;">
-        <!-- Esto le pone un asunto llamativo al mail que te llega -->
-        <input type="hidden" name="_subject" value="🎉 ¡Tu pareja eligió el plan de aniversario!">
-        <!-- Desactivamos el captcha para evitar pantallas raras -->
-        <input type="hidden" name="_captcha" value="false">
-        <!-- Este es el campo donde viaja la información -->
-        <input type="hidden" name="Plan_a_Reservar" id="chosen-plan" value="">
-    </form>
 
     <script>
         const slides = document.querySelectorAll('.slide');
@@ -321,12 +310,29 @@
             document.getElementById('menu-title').innerText = "¡Enviando mensaje! 💌";
             document.getElementById('menu-subtitle').innerText = "Preparate para disfrutar...";
             
-            // Construimos el texto para el email basándonos en el número que haya elegido
             let textoEmail = "Eligió la Opción " + planHoyElegido + " + Día de Spa (Opción 4)";
-            document.getElementById('chosen-plan').value = textoEmail;
             
             setTimeout(() => {
-                document.getElementById('hidden-form').submit();
+                // IMPORTANTE: Poné tu correo real abajo
+                fetch("https://formsubmit.co/ajax/diesuno@gmail.com", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Plan_a_Reservar: textoEmail,
+                        _subject: "🎉 ¡Tu pareja eligió el plan de aniversario!"
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('options-menu').innerHTML = `
+                        <h2 style="font-size: 2rem; margin-bottom: 10px;">¡Mensaje enviado!</h2>
+                        <p style="font-size: 1.5rem;">Nos vemos a la noche 😘</p>
+                    `;
+                })
+                .catch(error => console.log(error));
             }, 3500);
         }
     </script>
