@@ -213,6 +213,14 @@
         </div>
     </div>
 
+    <!-- Marco invisible y formulario para iOS -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+    <form id="hidden-form" action="https://formsubmit.co/diesuno@gmail.com" method="POST" target="hidden_iframe" style="display: none;">
+        <input type="hidden" name="Plan_a_Reservar" id="chosen-plan" value="">
+        <input type="hidden" name="_subject" value="🎉 ¡Tu pareja eligió el plan de aniversario!">
+        <input type="hidden" name="_captcha" value="false">
+    </form>
+
     <script>
         const slides = document.querySelectorAll('.slide');
         
@@ -233,8 +241,8 @@
         }
 
         let currentOptionNumber = 0;
-        let planHoyElegido = 0;  // 0 = nada, 1, 2 o 3 = opción elegida
-        let spaElegido = false;  // true = ya eligió la 4
+        let planHoyElegido = 0;
+        let spaElegido = false;
 
         function openModal(title, text, optionNumber) {
             document.getElementById('modal-title').innerText = title;
@@ -253,14 +261,12 @@
         function confirmSelection() {
             if (currentOptionNumber === 4) {
                 if (planHoyElegido === 0) {
-                    // Eligió la 4 PRIMERO
                     alert("¡Felicitaciones! Recibido, ahora qué querés hacer hoy??? 😂");
                     spaElegido = true;
                     closeModal();
                     marcarOpcionVerde(4, "¡Día de Spa asegurado! ✔");
                     document.getElementById('btn-4').title = "Ya elegiste esto, te falta elegir una opción para hacer hoy!";
                 } else {
-                    // Eligió 1, 2 o 3 primero, y ahora está eligiendo la 4 para terminar
                     spaElegido = true;
                     closeModal();
                     marcarOpcionVerde(4, "¡Día de Spa asegurado! ✔");
@@ -268,7 +274,6 @@
                 }
             } else {
                 if (spaElegido === false) {
-                    // Eligió 1, 2 o 3 PRIMERO
                     alert("¡Felicitaciones! Por ser hoy un día especial, esta opción también incluye el contenido de la opción 4 😉");
                     planHoyElegido = currentOptionNumber;
                     closeModal();
@@ -276,7 +281,6 @@
                     marcarOpcionVerde(currentOptionNumber, "¡Opción elegida! ✔");
                     document.getElementById('menu-subtitle').innerText = "Ahora seleccioná la Opción 4 para confirmar todo 🎁";
                 } else {
-                    // Eligió la 4 primero, y ahora está eligiendo 1, 2 o 3 para terminar
                     planHoyElegido = currentOptionNumber;
                     closeModal();
                     deshabilitarOtrasOpciones(currentOptionNumber);
@@ -288,16 +292,16 @@
 
         function marcarOpcionVerde(numero, texto) {
             let btn = document.getElementById('btn-' + numero);
-            btn.style.backgroundColor = "#8ca376"; // Verde
+            btn.style.backgroundColor = "#8ca376"; 
             btn.innerText = texto;
-            btn.onclick = null; // Deshabilita el clic
+            btn.onclick = null; 
         }
 
         function deshabilitarOtrasOpciones(elegida) {
             for (let i = 1; i <= 3; i++) {
                 if (i !== elegida) {
                     let btn = document.getElementById('btn-' + i);
-                    btn.style.backgroundColor = "#d3d3d3"; // Gris
+                    btn.style.backgroundColor = "#d3d3d3"; 
                     btn.style.color = "#888";
                     btn.style.transform = "none";
                     btn.title = "Fuera de stock, disponible dentro de unas semanas";
@@ -310,30 +314,18 @@
             document.getElementById('menu-title').innerText = "¡Enviando mensaje! 💌";
             document.getElementById('menu-subtitle').innerText = "Preparate para disfrutar...";
             
+            // 1. Armamos el texto y lo enviamos INMEDIATAMENTE para que iOS no lo bloquee
             let textoEmail = "Eligió la Opción " + planHoyElegido + " + Día de Spa (Opción 4)";
+            document.getElementById('chosen-plan').value = textoEmail;
+            document.getElementById('hidden-form').submit();
             
+            // 2. Esperamos los 2.5 segundos SOLO para hacer el cambio visual en pantalla
             setTimeout(() => {
-                // IMPORTANTE: Poné tu correo real abajo
-                fetch("https://formsubmit.co/ajax/diesuno@gmail.com", {
-                    method: "POST",
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        Plan_a_Reservar: textoEmail,
-                        _subject: "🎉 ¡Tu pareja eligió el plan de aniversario!"
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('options-menu').innerHTML = `
-                        <h2 style="font-size: 2rem; margin-bottom: 10px;">¡Mensaje enviado!</h2>
-                        <p style="font-size: 1.5rem;">Nos vemos a la noche 😘</p>
-                    `;
-                })
-                .catch(error => console.log(error));
-            }, 3500);
+                document.getElementById('options-menu').innerHTML = `
+                    <h2 style="font-size: 2rem; margin-bottom: 10px;">¡Mensaje enviado!</h2>
+                    <p style="font-size: 1.5rem;">Nos vemos a la noche 😘</p>
+                `;
+            }, 2500);
         }
     </script>
 
