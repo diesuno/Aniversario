@@ -200,11 +200,14 @@
         </div>
     </div>
 
- <!-- REEMPLAZAR TU_ENLACE_DE_FORMSPREE ACÁ ABAJO -->
-    <form id="hidden-form" action="https://formsubmit.co/diesuno@gmail.com" method="POST" style="display: none;">
-        <input type="hidden" name="Plan_Elegido" id="chosen-plan" value="">
-        <!-- Desactivamos el captcha para que no le salte una validación rara -->
+<!-- REEMPLAZAR TUCORREO@gmail.com CON TU MAIL REAL -->
+    <form id="hidden-form" action="https://formsubmit.co/TUCORREO@gmail.com" method="POST" style="display: none;">
+        <!-- Esto le pone un asunto llamativo al mail que te llega -->
+        <input type="hidden" name="_subject" value="🎉 ¡Tu pareja eligió el plan de aniversario!">
+        <!-- Desactivamos el captcha para evitar pantallas raras -->
         <input type="hidden" name="_captcha" value="false">
+        <!-- Este es el campo donde viaja la información -->
+        <input type="hidden" name="Plan_a_Reservar" id="chosen-plan" value="">
     </form>
 
     <script>
